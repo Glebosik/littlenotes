@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "60890715538",
+    "project_id": "lillynotes",
+    "storage_bucket": "lillynotes.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:60890715538:android:d33562bf4c183724a75d4b",
+        "android_client_info": {
+          "package_name": "com.example.littlenotes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "60890715538-k9apvq2481lhcnjn7ul1v32tpa3gchbv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhH0io3b3rd-NIQo4oMI23btudkOl0daA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "60890715538-k9apvq2481lhcnjn7ul1v32tpa3gchbv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
