@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:littlenotes/constatnts/routes.dart';
 import 'package:littlenotes/views/login_view.dart';
 import 'package:littlenotes/views/notes_view.dart';
 import 'package:littlenotes/views/register_view.dart';
@@ -13,9 +14,9 @@ void main() {
     ),
     home: const HomePage(),
     routes: {
-      '/login/': (context) => const LoginView(),
-      '/register/': (context) => const RegisterView(),
-      '/notes/': ((context) => const NotesView()),
+      loginRoute: (context) => const LoginView(),
+      registerRoute: (context) => const RegisterView(),
+      notesRoute: ((context) => const NotesView()),
     },
   ));
 }
