@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:littlenotes/views/login_view.dart';
 import 'package:littlenotes/views/register_view.dart';
 import 'package:littlenotes/views/home_page.dart';
 
@@ -10,5 +11,9 @@ void main() {
       primarySwatch: Colors.blue,
     ),
     home: const HomePage(),
+    routes: {
+      '/login/': (context) => const LoginView(),
+      '/register/': (context) => const RegisterView(),
+    },
   ));
 }
