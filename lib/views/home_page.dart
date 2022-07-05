@@ -1,9 +1,11 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:littlenotes/firebase_options.dart';
 import 'package:littlenotes/views/login_view.dart';
-import 'package:littlenotes/views/register_view.dart';
+import 'package:littlenotes/views/notes_view.dart';
 import 'package:littlenotes/views/verify_email_view.dart';
 
 class HomePage extends StatelessWidget {
@@ -22,14 +24,13 @@ class HomePage extends StatelessWidget {
             if (user != null) {
               user.reload();
               if (user.emailVerified) {
-                print('Email is verified');
+                return const NotesView();
               } else {
                 return const VerifyEmailView();
               }
             } else {
               return const LoginView();
             }
-            return const Text('Done');
           default:
             return const Center(
               child: CircularProgressIndicator(),
