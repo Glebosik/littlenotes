@@ -21,7 +21,7 @@ class DatabaseNote {
 
   @override
   String toString() =>
-      'Notem ID = $id, userId = $userId, isSyncedWithCloud = $isSyncedWithCloud, text = $text';
+      'Note ID = $id, userId = $userId, isSyncedWithCloud = $isSyncedWithCloud, text = $text';
 
   @override
   bool operator ==(covariant DatabaseNote other) => id == other.id;

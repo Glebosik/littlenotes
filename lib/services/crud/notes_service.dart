@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:littlenotes/services/crud/constants.dart';
 import 'package:littlenotes/services/crud/crud_exceptions.dart';
@@ -12,12 +13,17 @@ class NotesService {
   Database? _db;
   List<DatabaseNote> _notes = [];
 
-  NotesService._sharedInstance();
+  NotesService._sharedInstance() {
+    _notesStreamController = StreamController<List<DatabaseNote>>.broadcast(
+      onListen: () {
+        _notesStreamController.sink.add(_notes);
+      },
+    );
+  }
   static final NotesService _shared = NotesService._sharedInstance();
   factory NotesService() => _shared;
 
-  final _notesStreamController =
-      StreamController<List<DatabaseNote>>.broadcast();
+  late final StreamController<List<DatabaseNote>> _notesStreamController;
 
   Stream<List<DatabaseNote>> get allNotes => _notesStreamController.stream;
 
@@ -119,9 +125,7 @@ class NotesService {
   Future<Iterable<DatabaseNote>> getAllNotes() async {
     await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
-    final results = await db.query(
-      noteTable,
-    );
+    final results = await db.query(noteTable);
     return results.map((noteRow) => DatabaseNote.fromRow(noteRow));
   }
 
@@ -135,10 +139,15 @@ class NotesService {
     // make sure note exists (if it doesn't exist it will throw an exception)
     await getNote(id: note.id);
 
-    final updatesCount = await db.update(noteTable, {
-      textColumn: text,
-      syncColumn: 0,
-    });
+    final updatesCount = await db.update(
+      noteTable,
+      {
+        textColumn: text,
+        syncColumn: 0,
+      },
+      where: 'id = ?',
+      whereArgs: [note.id],
+    );
 
     if (updatesCount == 0) {
       throw CouldNotUpdateNote();
@@ -229,16 +238,28 @@ class NotesService {
       final docsPath = await getApplicationDocumentsDirectory();
       final dbPath = join(docsPath.path, dbName);
       final db = await openDatabase(dbPath);
+      log(dbPath);
       _db = db;
       await db.execute(createUserTable);
       await db.execute(createNoteTable);
       await _cacheNotes();
+      log(_notes.toString());
     } on MissingPlatformDirectoryException {
       throw UnableToGetDocumentsDirectory();
     }
   }
 
+  Future<void> checkDatabase() async {
+    log('Checking Database...');
+    await _ensureDbIsOpen();
+    final db = _getDatabaseOrThrow();
+    final results = await db.query(noteTable);
+    results.map((noteRow) => DatabaseNote.fromRow(noteRow));
+    log(results.map((noteRow) => DatabaseNote.fromRow(noteRow)).toString());
+  }
+
   Future<void> close() async {
+    log(_notes.toString());
     final db = _db;
     if (db == null) {
       throw DatabaseIsNotOpen();
