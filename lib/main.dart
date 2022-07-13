@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:littlenotes/constatnts/routes.dart';
 import 'package:littlenotes/views/login_view.dart';
-import 'package:littlenotes/views/notes/new_note_view.dart';
+import 'package:littlenotes/views/notes/create_update_note_view.dart';
 import 'package:littlenotes/views/notes/notes_view.dart';
 import 'package:littlenotes/views/register_view.dart';
 import 'package:littlenotes/views/home_page.dart';
@@ -18,7 +18,7 @@ void main() {
       loginRoute: (context) => const LoginView(),
       registerRoute: (context) => const RegisterView(),
       notesRoute: ((context) => const NotesView()),
-      newNoteRoute: ((context) => const NewNoteView()),
+      createOrUpdateNoteRoute: ((context) => const CreateUpdateNoteView()),
     },
   ));
 }
