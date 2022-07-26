@@ -2,32 +2,61 @@ part of 'auth_bloc.dart';
 
 @immutable
 abstract class AuthState {
-  const AuthState();
+  final bool isLoading;
+  final String? loadingText;
+  const AuthState({
+    required this.isLoading,
+    this.loadingText = 'Loading...',
+  });
 }
 
 class AuthStateUninitialized extends AuthState {
-  const AuthStateUninitialized();
+  const AuthStateUninitialized({required bool isLoading})
+      : super(isLoading: isLoading);
 }
 
 class AuthStateSignedIn extends AuthState {
   final AuthUser user;
-  const AuthStateSignedIn(this.user);
+  const AuthStateSignedIn({
+    required this.user,
+    required bool isLoading,
+  }) : super(isLoading: isLoading);
 }
 
 class AuthStateSigningUp extends AuthState {
   final Exception? exception;
-  const AuthStateSigningUp(this.exception);
+  const AuthStateSigningUp({
+    required this.exception,
+    required bool isLoading,
+  }) : super(isLoading: isLoading);
 }
 
 class AuthStateNeedsVerification extends AuthState {
-  const AuthStateNeedsVerification();
+  const AuthStateNeedsVerification({required bool isLoading})
+      : super(isLoading: isLoading);
 }
 
 class AuthStateSignedOut extends AuthState with EquatableMixin {
   final Exception? exception;
-  final bool isLoading;
-  const AuthStateSignedOut(this.exception, this.isLoading);
+  const AuthStateSignedOut({
+    required this.exception,
+    required bool isLoading,
+    String? loadingText,
+  }) : super(
+          isLoading: isLoading,
+          loadingText: loadingText,
+        );
 
   @override
   List<Object?> get props => [exception, isLoading];
+}
+
+class AuthStateForgotPassword extends AuthState {
+  final Exception? exception;
+  final bool hasSentEmail;
+  const AuthStateForgotPassword({
+    required this.exception,
+    required this.hasSentEmail,
+    required bool isLoading,
+  }) : super(isLoading: isLoading);
 }

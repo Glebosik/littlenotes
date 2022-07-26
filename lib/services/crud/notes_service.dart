@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:littlenotes/extensions/list/filter.dart';
 import 'package:littlenotes/services/crud/constants.dart';
@@ -259,28 +258,23 @@ class NotesService {
       final docsPath = await getApplicationDocumentsDirectory();
       final dbPath = join(docsPath.path, dbName);
       final db = await openDatabase(dbPath);
-      log(dbPath);
       _db = db;
       await db.execute(createUserTable);
       await db.execute(createNoteTable);
       await _cacheNotes();
-      log(_notes.toString());
     } on MissingPlatformDirectoryException {
       throw UnableToGetDocumentsDirectory();
     }
   }
 
   Future<void> checkDatabase() async {
-    log('Checking Database...');
     await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
     final results = await db.query(noteTable);
     results.map((noteRow) => DatabaseNote.fromRow(noteRow));
-    log(results.map((noteRow) => DatabaseNote.fromRow(noteRow)).toString());
   }
 
   Future<void> close() async {
-    log(_notes.toString());
     final db = _db;
     if (db == null) {
       throw DatabaseIsNotOpen();

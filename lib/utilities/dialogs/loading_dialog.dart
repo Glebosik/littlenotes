@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 typedef CloseDialog = void Function();
 
+@Deprecated(
+    'It is not a good idea to use Navigator.pop() with a loading dialog. It is possible to pop something in the navigator stack you should not pop')
 CloseDialog showLoadingDialog({
   required BuildContext context,
   required String text,
