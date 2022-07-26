@@ -62,5 +62,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthStateSignedOut(e, false));
       }
     }));
+    on<AuthEventShouldSignUp>(((event, emit) {
+      emit(const AuthStateSigningUp(null));
+    }));
   }
 }

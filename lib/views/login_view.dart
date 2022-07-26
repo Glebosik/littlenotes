@@ -37,7 +37,7 @@ class _SignInViewState extends State<SignInView> {
       listener: (context, state) async {
         if (state is AuthStateSignedOut) {
           final closeDialog = _closeDialogHandle;
-          if (state.isLoading && closeDialog != null) {
+          if (!state.isLoading && closeDialog != null) {
             closeDialog();
             _closeDialogHandle = null;
           } else if (state.isLoading && closeDialog == null) {
