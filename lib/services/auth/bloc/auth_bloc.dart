@@ -27,7 +27,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         ));
       }
     });
-    on<AuthEventSignIn>(((event, emit) async {
+    on<AuthEventSignIn>((event, emit) async {
       emit(const AuthStateSignedOut(
         exception: null,
         isLoading: true,
@@ -67,8 +67,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           isLoading: false,
         ));
       }
-    }));
-    on<AuthEventSignUp>(((event, emit) async {
+    });
+    on<AuthEventSignUp>((event, emit) async {
       final email = event.email;
       final password = event.password;
       try {
@@ -78,8 +78,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       } on Exception catch (e) {
         emit(AuthStateSigningUp(exception: e, isLoading: false));
       }
-    }));
-    on<AuthEventSignOut>(((event, emit) async {
+    });
+    on<AuthEventSignOut>((event, emit) async {
       try {
         await provider.signOut();
         emit(const AuthStateSignedOut(
@@ -92,12 +92,43 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           isLoading: false,
         ));
       }
-    }));
-    on<AuthEventShouldSignUp>(((event, emit) {
+    });
+    on<AuthEventShouldSignUp>((event, emit) {
       emit(const AuthStateSigningUp(
         exception: null,
         isLoading: false,
       ));
-    }));
+    });
+    on<AuthEventForgotPassword>((event, emit) async {
+      emit(const AuthStateForgotPassword(
+        exception: null,
+        hasSentEmail: false,
+        isLoading: false,
+      ));
+      final email = event.email;
+      if (email == null) {
+        return;
+      }
+      emit(const AuthStateForgotPassword(
+        exception: null,
+        hasSentEmail: false,
+        isLoading: true,
+      ));
+      bool hasSentEmail;
+      Exception? exception;
+      try {
+        await provider.sendPasswordReset(toEmail: email);
+        hasSentEmail = true;
+        exception = null;
+      } on Exception catch (e) {
+        hasSentEmail = false;
+        exception = e;
+      }
+      emit(AuthStateForgotPassword(
+        exception: exception,
+        hasSentEmail: hasSentEmail,
+        isLoading: false,
+      ));
+    });
   }
 }

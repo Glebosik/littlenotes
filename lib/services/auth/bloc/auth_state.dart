@@ -4,9 +4,11 @@ part of 'auth_bloc.dart';
 abstract class AuthState {
   final bool isLoading;
   final String? loadingText;
+  final Exception? exception;
   const AuthState({
     required this.isLoading,
     this.loadingText = 'Loading...',
+    this.exception,
   });
 }
 
@@ -24,11 +26,10 @@ class AuthStateSignedIn extends AuthState {
 }
 
 class AuthStateSigningUp extends AuthState {
-  final Exception? exception;
   const AuthStateSigningUp({
-    required this.exception,
     required bool isLoading,
-  }) : super(isLoading: isLoading);
+    Exception? exception,
+  }) : super(isLoading: isLoading, exception: exception);
 }
 
 class AuthStateNeedsVerification extends AuthState {
@@ -37,26 +38,28 @@ class AuthStateNeedsVerification extends AuthState {
 }
 
 class AuthStateSignedOut extends AuthState with EquatableMixin {
-  final Exception? exception;
   const AuthStateSignedOut({
-    required this.exception,
     required bool isLoading,
     String? loadingText,
+    Exception? exception,
   }) : super(
           isLoading: isLoading,
           loadingText: loadingText,
+          exception: exception,
         );
 
   @override
   List<Object?> get props => [exception, isLoading];
 }
 
-class AuthStateForgotPassword extends AuthState {
-  final Exception? exception;
+class AuthStateForgotPassword extends AuthState with EquatableMixin {
   final bool hasSentEmail;
   const AuthStateForgotPassword({
-    required this.exception,
     required this.hasSentEmail,
     required bool isLoading,
-  }) : super(isLoading: isLoading);
+    Exception? exception,
+  }) : super(isLoading: isLoading, exception: exception);
+
+  @override
+  List<Object?> get props => [exception, hasSentEmail, isLoading];
 }

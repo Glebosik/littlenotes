@@ -8,17 +8,29 @@ import 'package:littlenotes/views/home_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MaterialApp(
-    title: 'Flutter Demo',
-    theme: ThemeData(
-      primarySwatch: Colors.blue,
-    ),
-    home: BlocProvider<AuthBloc>(
-      create: (context) => AuthBloc(FirebaseAuthProvider()),
-      child: const HomePage(),
-    ),
-    routes: {
-      createOrUpdateNoteRoute: ((context) => const CreateUpdateNoteView()),
-    },
-  ));
+  BlocOverrides.runZoned(
+      () => runApp(MaterialApp(
+            title: 'Flutter Demo',
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+            ),
+            home: BlocProvider<AuthBloc>(
+              create: (context) => AuthBloc(FirebaseAuthProvider())
+                ..add(const AuthEventInitialize()),
+              child: const HomePage(),
+            ),
+            routes: {
+              createOrUpdateNoteRoute: ((context) =>
+                  const CreateUpdateNoteView()),
+            },
+          )),
+      blocObserver: CounterObserver());
+}
+
+class CounterObserver extends BlocObserver {
+  @override
+  void onChange(BlocBase bloc, Change change) {
+    super.onChange(bloc, change);
+    print('${bloc.runtimeType} $change');
+  }
 }

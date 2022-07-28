@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:littlenotes/constatnts/routes.dart';
@@ -42,7 +40,6 @@ class _NotesViewState extends State<NotesView> {
             ),
             PopupMenuButton<MenuAction>(
               onSelected: (value) async {
-                log(value.toString());
                 switch (value) {
                   case MenuAction.signout:
                     final shouldLogout = await showSignOutDialog(context);
